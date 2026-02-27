@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
-#include <vector>
+#include <cstddef>
 
 #include "gaivoronskiy_m_marking_binary_components/common/include/common.hpp"
 #include "gaivoronskiy_m_marking_binary_components/seq/include/ops_seq.hpp"
@@ -13,13 +13,13 @@ class GaivoronskiyMMarkingPerfTests : public ppc::util::BaseRunPerfTests<InType,
   InType input_data_;
 
   void SetUp() override {
-    const int kSize = 500;
-    input_data_.resize(static_cast<size_t>(kSize * kSize + 2));
-    input_data_[0] = kSize;
-    input_data_[1] = kSize;
-    for (int i = 0; i < kSize; i++) {
-      for (int j = 0; j < kSize; j++) {
-        input_data_[static_cast<size_t>(i * kSize + j + 2)] = (i % 2 == 0) ? 0 : 1;
+    const int k_size = 500;
+    input_data_.resize(static_cast<std::size_t>(k_size) * static_cast<std::size_t>(k_size) + 2);
+    input_data_[0] = k_size;
+    input_data_[1] = k_size;
+    for (int i = 0; i < k_size; i++) {
+      for (int j = 0; j < k_size; j++) {
+        input_data_[static_cast<std::size_t>(i * k_size) + static_cast<std::size_t>(j) + 2] = (i % 2 == 0) ? 0 : 1;
       }
     }
   }
@@ -27,7 +27,7 @@ class GaivoronskiyMMarkingPerfTests : public ppc::util::BaseRunPerfTests<InType,
   bool CheckTestOutputData(OutType &output_data) final {
     int rows = input_data_[0];
     int cols = input_data_[1];
-    if (static_cast<int>(output_data.size()) != rows * cols + 2) {
+    if (static_cast<int>(output_data.size()) != (rows * cols) + 2) {
       return false;
     }
     return std::any_of(output_data.begin() + 2, output_data.end(), [](int v) { return v > 0; });
